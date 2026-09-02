@@ -90,11 +90,17 @@ def download_video(request: DownloadRequest):
     output_template = str(DOWNLOAD_DIR / f"{job_id}.%(ext)s")
 
     options = {
-        "outtmpl": output_template,
-        "format": "best[ext=mp4]/best",
-        "noplaylist": True,
-        "quiet": True,
-        "no_warnings": True,
+    "outtmpl": output_template,
+    "format": "best[ext=mp4]/best",
+    "noplaylist": True,
+    "quiet": True,
+    "no_warnings": True,
+    "extractor_args": {
+        "youtube": {
+            "player_client": ["android_vr"]
+        }
+    },
+}
     }
 
     try:
