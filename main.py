@@ -113,7 +113,7 @@ def download_video(request: DownloadRequest):
         return {
             "success": True,
             "title": info.get("title", "video"),
-            "download_url": f"/api/file/{file_path.name}"
+            "download_url": f"https://videobaja-downloader.onrender.com/api/file/{file_path.name}"
         }
 
     except Exception as e:
