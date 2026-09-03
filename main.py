@@ -97,26 +97,27 @@ def download_video(request: DownloadRequest):
         DOWNLOAD_DIR / f"{job_id}.%(ext)s"
     )
 
-   options = {
-    "outtmpl": output_template,
-    "format": "best[ext=mp4]/best",
-    "noplaylist": True,
-    "quiet": False,
-    "no_warnings": False,
-    "verbose": True,
-    "extractor_args": {
-        "youtube": {
-            "player_client": [
-                "mweb"
-            ]
-        },
-        "youtubepot-bgutilhttp": {
-            "base_url": [
-                "http://127.0.0.1:4416"
-            ]
+    options = {
+        "outtmpl": output_template,
+        "format": "best[ext=mp4]/best",
+        "noplaylist": True,
+        "quiet": False,
+        "no_warnings": False,
+        "verbose": True,
+
+        "extractor_args": {
+            "youtube": {
+                "player_client": [
+                    "mweb"
+                ]
+            },
+            "youtubepot-bgutilhttp": {
+                "base_url": [
+                    "http://127.0.0.1:4416"
+                ]
+            }
         }
     }
-}
 
     try:
 
@@ -148,17 +149,14 @@ def download_video(request: DownloadRequest):
 
         return {
             "success": True,
-
             "title": info.get(
                 "title",
                 "Video preparado"
             ),
-
             "thumbnail": info.get(
                 "thumbnail",
                 ""
             ),
-
             "download_url": (
                 "https://videobaja-downloader.onrender.com"
                 f"/api/file/{file_path.name}"
