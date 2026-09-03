@@ -112,11 +112,12 @@ options = {
                 raise Exception("No se encontró el archivo descargado")
             file_path = files[0]
 
-        return {
-            "success": True,
-            "title": info.get("title", "video"),
-            "download_url": f"https://videobaja-downloader.onrender.com/api/file/{file_path.name}"
-        }
+       return {
+    "success": True,
+    "title": info.get("title", "Video preparado"),
+    "thumbnail": info.get("thumbnail", ""),
+    "download_url": f"https://videobaja-downloader.onrender.com/api/file/{file_path.name}"
+}
 
     except Exception as e:
         raise HTTPException(
