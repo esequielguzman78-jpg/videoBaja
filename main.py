@@ -101,8 +101,9 @@ def download_video(request: DownloadRequest):
         "outtmpl": output_template,
         "format": "best[ext=mp4]/best",
         "noplaylist": True,
-        "quiet": True,
-        "no_warnings": True,
+        "quiet": False,
+"no_warnings": False,
+"verbose": True,
 
         "extractor_args": {
     "youtube": {
