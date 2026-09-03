@@ -71,7 +71,6 @@ def health():
 
 @app.post("/api/download")
 def download_video(request: DownloadRequest):
-
     url = request.url.strip()
 
     if not re.match(r"^https?://", url):
@@ -87,16 +86,25 @@ def download_video(request: DownloadRequest):
         )
 
     job_id = str(uuid.uuid4())
-    output_template = str(DOWNLOAD_DIR / f"{job_id}.%(ext)s")
-options = {
-    "outtmpl": output_template,
-    "format": "best[ext=mp4]/best",
-    "noplaylist": True,
-    "quiet": True,
-    "no_warnings": True,
-}
-   
-}
+
+    output_template = str(
+        DOWNLOAD_DIR / f"{job_id}.%(ext)s"
+    )
+
+    options = {
+        "outtmpl": output_template,
+        "format": "best[ext=mp4]/best",
+        "noplaylist": True,
+        "quiet": True,
+        "no_warnings": True,
+        "extractor_args": {
+            "youtube": {
+                "player_client": [
+                    "web_safari",
+                    "web"
+                ]
+            }
+        },
     }
 
     try:
@@ -107,28 +115,45 @@ options = {
         file_path = Path(filename)
 
         if not file_path.exists():
-            files = list(DOWNLOAD_DIR.glob(f"{job_id}.*"))
+            files = list(
+                DOWNLOAD_DIR.glob(f"{job_id}.*")
+            )
+
             if not files:
-                raise Exception("No se encontró el archivo descargado")
+                raise Exception(
+                    "No se encontró el archivo descargado"
+                )
+
             file_path = files[0]
 
-       return {
-    "success": True,
-    "title": info.get("title", "Video preparado"),
-    "thumbnail": info.get("thumbnail", ""),
-    "download_url": f"https://videobaja-downloader.onrender.com/api/file/{file_path.name}"
-}
+        return {
+            "success": True,
+            "title": info.get(
+                "title",
+                "Video preparado"
+            ),
+            "thumbnail": info.get(
+                "thumbnail",
+                ""
+            ),
+            "download_url": (
+                "https://videobaja-downloader.onrender.com"
+                f"/api/file/{file_path.name}"
+            )
+        }
 
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"No se pudo procesar el video: {str(e)}"
+            detail=(
+                "No se pudo procesar el video: "
+                f"{str(e)}"
+            )
         )
 
 
 @app.get("/api/file/{filename}")
 def get_file(filename: str):
-
     file_path = DOWNLOAD_DIR / filename
 
     if not file_path.exists():
