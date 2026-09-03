@@ -2,24 +2,18 @@
 
 set -e
 
-echo "=== Instalando Python ==="
 pip install -r requirements.txt
 
-echo "=== Instalando Node.js ==="
 apt-get update
-apt-get install -y nodejs npm
+apt-get install -y nodejs npm git
 
-echo "=== Descargando bgutil ==="
-rm -rf /tmp/bgutil-ytdlp-pot-provider
+rm -rf /tmp/bgutil
 
 git clone --depth 1 --branch 1.3.1 \
 https://github.com/Brainicism/bgutil-ytdlp-pot-provider.git \
-/tmp/bgutil-ytdlp-pot-provider
+/tmp/bgutil
 
-echo "=== Instalando bgutil ==="
-cd /tmp/bgutil-ytdlp-pot-provider/server
+cd /tmp/bgutil/server
 
-npm ci
+npm install
 npx tsc
-
-echo "=== bgutil listo ==="
