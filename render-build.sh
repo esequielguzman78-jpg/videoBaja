@@ -2,21 +2,24 @@
 
 set -e
 
-echo "Instalando dependencias de Python..."
+echo "=== Instalando Python ==="
 pip install -r requirements.txt
 
-echo "Instalando Node.js..."
+echo "=== Instalando Node.js ==="
 apt-get update
 apt-get install -y nodejs npm
 
-echo "Descargando proveedor PO Token..."
+echo "=== Descargando bgutil ==="
+rm -rf /tmp/bgutil-ytdlp-pot-provider
+
 git clone --depth 1 --branch 1.3.1 \
 https://github.com/Brainicism/bgutil-ytdlp-pot-provider.git \
 /tmp/bgutil-ytdlp-pot-provider
 
-echo "Instalando proveedor..."
+echo "=== Instalando bgutil ==="
 cd /tmp/bgutil-ytdlp-pot-provider/server
-npm ci --omit=dev
+
+npm ci
 npx tsc
 
-echo "Proveedor PO Token preparado."
+echo "=== bgutil listo ==="
