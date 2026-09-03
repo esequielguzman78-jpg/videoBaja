@@ -97,27 +97,26 @@ def download_video(request: DownloadRequest):
         DOWNLOAD_DIR / f"{job_id}.%(ext)s"
     )
 
-    options = {
-        "outtmpl": output_template,
-        "format": "best[ext=mp4]/best",
-        "noplaylist": True,
-        "quiet": False,
-"no_warnings": False,
-"verbose": True,
-
-        "extractor_args": {
-    "youtube": {
-        "player_client": [
-            "mweb"
-        ]
-    },
-    "youtubepot-bgutilhttp": {
-        "base_url": [
-            "http://127.0.0.1:4416"
-        ]
+   options = {
+    "outtmpl": output_template,
+    "format": "best[ext=mp4]/best",
+    "noplaylist": True,
+    "quiet": False,
+    "no_warnings": False,
+    "verbose": True,
+    "extractor_args": {
+        "youtube": {
+            "player_client": [
+                "mweb"
+            ]
+        },
+        "youtubepot-bgutilhttp": {
+            "base_url": [
+                "http://127.0.0.1:4416"
+            ]
+        }
     }
-},
-    }
+}
 
     try:
 
