@@ -53,7 +53,10 @@ def allowed_url(url: str, platform: str) -> bool:
     if platform not in domains:
         return False
 
-    return any(domain in url.lower() for domain in domains[platform])
+    return any(
+        domain in url.lower()
+        for domain in domains[platform]
+    )
 
 
 @app.get("/")
@@ -66,11 +69,14 @@ def home():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok"
+    }
 
 
 @app.post("/api/download")
 def download_video(request: DownloadRequest):
+
     url = request.url.strip()
 
     if not re.match(r"^https?://", url):
@@ -97,26 +103,35 @@ def download_video(request: DownloadRequest):
         "noplaylist": True,
         "quiet": True,
         "no_warnings": True,
+
         "extractor_args": {
             "youtube": {
                 "player_client": [
-                    "web_safari",
-                    "web"
+                    "mweb"
                 ]
             }
         },
     }
 
     try:
+
         with yt_dlp.YoutubeDL(options) as ydl:
-            info = ydl.extract_info(url, download=True)
+
+            info = ydl.extract_info(
+                url,
+                download=True
+            )
+
             filename = ydl.prepare_filename(info)
 
         file_path = Path(filename)
 
         if not file_path.exists():
+
             files = list(
-                DOWNLOAD_DIR.glob(f"{job_id}.*")
+                DOWNLOAD_DIR.glob(
+                    f"{job_id}.*"
+                )
             )
 
             if not files:
@@ -128,14 +143,17 @@ def download_video(request: DownloadRequest):
 
         return {
             "success": True,
+
             "title": info.get(
                 "title",
                 "Video preparado"
             ),
+
             "thumbnail": info.get(
                 "thumbnail",
                 ""
             ),
+
             "download_url": (
                 "https://videobaja-downloader.onrender.com"
                 f"/api/file/{file_path.name}"
@@ -143,6 +161,7 @@ def download_video(request: DownloadRequest):
         }
 
     except Exception as e:
+
         raise HTTPException(
             status_code=500,
             detail=(
@@ -154,9 +173,11 @@ def download_video(request: DownloadRequest):
 
 @app.get("/api/file/{filename}")
 def get_file(filename: str):
+
     file_path = DOWNLOAD_DIR / filename
 
     if not file_path.exists():
+
         raise HTTPException(
             status_code=404,
             detail="Archivo no encontrado"
